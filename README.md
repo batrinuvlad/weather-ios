@@ -115,12 +115,8 @@ For previews, open `Weather/Previews/WeatherPreviews.swift` with the Weather sch
 
 OpenAI Codex was used extensively for code generation and implementation, architecture discussions and refinements, tests, debugging, code review, and documentation. This was an AI-assisted implementation, not primarily handwritten code. The generated implementation was inspected, built, and validated through automated tests and simulator checks during the assisted development sessions.
 
-**Developer confirmation before submission:** Personal review and understanding of the generated code, and ownership of the build/test/simulator validation.
-
 ## Time spent
 
 **Total implementation time: 3-4 hours*.
 
 **Additional time for optional features: 0.5 - 1 hour*.
-
-Earlier session-duration estimates do not establish the complete development time. These placeholders must be replaced with the developer's honest estimate before submission.
