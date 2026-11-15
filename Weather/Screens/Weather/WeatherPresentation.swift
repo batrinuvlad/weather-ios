@@ -2,9 +2,10 @@ import Foundation
 
 // Formatting stays next to the screen so the decoded models remain presentation-independent.
 enum WeatherPresentation {
-    static func temperature(_ value: Double?) -> String {
+    static func temperature(_ value: Double?, unit: TemperatureUnit = .celsius,
+                            locale: Locale = .current) -> String {
         guard let value, value.isFinite else { return "—" }
-        return value.formatted(.number.precision(.fractionLength(0))) + "°C"
+        return unit.converted(value).formatted(.number.locale(locale).precision(.fractionLength(0))) + unit.rawValue
     }
 
     static func windSpeed(_ value: Double?) -> String {
@@ -39,6 +40,14 @@ enum WeatherPresentation {
         formatter.timeZone = timeZone
         formatter.dateStyle = .medium
         return "Seven days from \(formatter.string(from: date))"
+    }
+
+    static func time(_ date: Date, timeZone: TimeZone) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.timeZone = timeZone
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
 
     static func symbol(for icon: String?) -> String {

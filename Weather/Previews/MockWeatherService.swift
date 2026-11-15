@@ -7,6 +7,9 @@ actor MockWeatherService: WeatherService {
         case idle, loading, success, offline, rateLimited, invalidResponse, retrySuccess
     }
 
+    // Fixed to the saved hourly fixture so previews show the same remaining hours every time.
+    static let sampleDate = Date(timeIntervalSince1970: 1794760620)
+
     private let scenario: Scenario
     private(set) var requestCount = 0
 

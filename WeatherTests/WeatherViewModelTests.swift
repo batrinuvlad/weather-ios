@@ -71,6 +71,106 @@ final class WeatherViewModelTests: XCTestCase {
         XCTAssertEqual(model.state, .loaded(forecast))
     }
 
+    func testUnitSwitchingDoesNotFetchOrMutateMetricForecast() async throws {
+        let service = ControlledWeatherService()
+        let model = WeatherViewModel(service: service, location: "Example")
+        XCTAssertEqual(model.temperatureUnit, .celsius)
+        let forecast = try WeatherFixture.forecast()
+        let load = Task { await model.load() }
+        await service.waitUntilRequested()
+        service.complete(with: .success(forecast))
+        await load.value
+
+        model.temperatureUnit = .fahrenheit
+        model.temperatureUnit = .celsius
+        model.temperatureUnit = .fahrenheit
+
+        XCTAssertEqual(service.locations.count, 1)
+        XCTAssertEqual(model.state, .loaded(forecast))
+        XCTAssertTrue(WeatherPresentation.windSpeed(forecast.currentConditions.windSpeed).hasSuffix("km/h"))
+    }
+
+    func testSuccessfulRefreshRetainsDataWhileLoadingAndUpdatesCompletionTime() async throws {
+        let service = ControlledWeatherService()
+        let first = try WeatherFixture.forecast()
+        let second = WeatherForecast(resolvedAddress: "Updated location", timezone: first.timezone,
+                                     currentConditions: first.currentConditions, days: first.days)
+        var time = Date(timeIntervalSince1970: 1000)
+        let model = WeatherViewModel(service: service, location: "Example", now: { time })
+        XCTAssertNil(model.lastUpdated)
+        let initialLoad = Task { await model.load() }
+        await service.waitUntilRequested()
+        service.complete(with: .success(first))
+        await initialLoad.value
+        XCTAssertEqual(model.lastUpdated, time)
+
+        let refresh = Task { await model.load() }
+        await service.waitUntilRequested()
+        XCTAssertEqual(model.state, .loaded(first))
+        XCTAssertTrue(model.isLoading)
+        XCTAssertEqual(model.lastUpdated, Date(timeIntervalSince1970: 1000))
+        await model.load() // An overlapping refresh must not send a third request.
+        XCTAssertEqual(service.locations.count, 2)
+        time = Date(timeIntervalSince1970: 2000)
+        service.complete(with: .success(second))
+        await refresh.value
+
+        XCTAssertEqual(model.state, .loaded(second))
+        XCTAssertEqual(model.lastUpdated, time)
+        XCTAssertNil(model.refreshError)
+        XCTAssertFalse(model.isLoading)
+    }
+
+    func testFailedRefreshPreservesForecastAndTimestampAndCanRetry() async throws {
+        let service = ControlledWeatherService()
+        let forecast = try WeatherFixture.forecast()
+        var time = Date(timeIntervalSince1970: 1000)
+        let model = WeatherViewModel(service: service, location: "Example", now: { time })
+        let initialLoad = Task { await model.load() }
+        await service.waitUntilRequested()
+        service.complete(with: .success(forecast))
+        await initialLoad.value
+
+        for error in [WeatherError.offline, .rateLimited, .invalidResponse] {
+            let refresh = Task { await model.load() }
+            await service.waitUntilRequested()
+            time = Date(timeIntervalSince1970: 2000)
+            service.complete(with: .failure(error))
+            await refresh.value
+            XCTAssertEqual(model.state, .loaded(forecast))
+            XCTAssertEqual(model.refreshError, error)
+            XCTAssertEqual(model.lastUpdated, Date(timeIntervalSince1970: 1000))
+            XCTAssertFalse(model.isLoading)
+        }
+        let retry = Task { await model.load() }
+        await service.waitUntilRequested()
+        XCTAssertNil(model.refreshError)
+        service.complete(with: .success(forecast))
+        await retry.value
+        XCTAssertNil(model.refreshError)
+        XCTAssertEqual(model.lastUpdated, time)
+    }
+
+    func testCancelledRefreshPreservesForecastAndTimestamp() async throws {
+        let service = ControlledWeatherService()
+        let forecast = try WeatherFixture.forecast()
+        let completed = Date(timeIntervalSince1970: 1000)
+        let model = WeatherViewModel(service: service, location: "Example", now: { completed })
+        let load = Task { await model.load() }
+        await service.waitUntilRequested()
+        service.complete(with: .success(forecast))
+        await load.value
+        let refresh = Task { await model.load() }
+        await service.waitUntilRequested()
+        refresh.cancel()
+        service.complete(with: .success(forecast))
+        await refresh.value
+        XCTAssertEqual(model.state, .loaded(forecast))
+        XCTAssertEqual(model.lastUpdated, completed)
+        XCTAssertNil(model.refreshError)
+        XCTAssertFalse(model.isLoading)
+    }
+
     func testUnexpectedErrorGetsUserFacingFallback() async {
         let service = ControlledWeatherService()
         let model = WeatherViewModel(service: service, location: "Example")

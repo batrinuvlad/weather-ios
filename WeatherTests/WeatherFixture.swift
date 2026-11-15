@@ -1,6 +1,6 @@
 import Foundation
 
-// This is the unmodified successful response fetched on 14 November 2026.
+// This is the unmodified successful response fetched on 15 November 2026 (including hours).
 enum WeatherFixture {
     static func data() throws -> Data {
         let bundle = Bundle(for: FixtureBundleMarker.self)

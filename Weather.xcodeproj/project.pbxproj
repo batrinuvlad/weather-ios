@@ -20,6 +20,7 @@
 				Networking/WeatherError.swift,
 				Networking/WeatherService.swift,
 				Previews/MockWeatherService.swift,
+				Screens/Weather/TemperatureUnit.swift,
 				Screens/Weather/WeatherPresentation.swift,
 				Screens/Weather/WeatherViewModel.swift,
 			);

@@ -28,7 +28,8 @@ final class WeatherServiceTests: XCTestCase {
             XCTAssertEqual(url.host, "weather.visualcrossing.com")
             XCTAssertEqual(url.lastPathComponent, "London,UK")
             let query = Dictionary(uniqueKeysWithValues: (components.queryItems ?? []).map { ($0.name, $0.value ?? "") })
-            XCTAssertEqual(query, ["include": "days,current", "unitGroup": "metric"])
+            XCTAssertEqual(query, ["include": "days,current,hours", "unitGroup": "metric"])
+            XCTAssertEqual(request.cachePolicy, .reloadIgnoringLocalCacheData)
             XCTAssertEqual(request.value(forHTTPHeaderField: "Accept-Encoding"), "gzip")
             return (HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!, data)
         }

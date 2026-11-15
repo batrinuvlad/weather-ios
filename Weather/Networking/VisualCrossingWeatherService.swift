@@ -14,11 +14,12 @@ struct VisualCrossingWeatherService: WeatherService {
         let endpoint = URL(string: "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline")!
         var components = URLComponents(url: endpoint.appendingPathComponent(location), resolvingAgainstBaseURL: false)!
         components.queryItems = [
-            URLQueryItem(name: "include", value: "days,current"),
+            URLQueryItem(name: "include", value: "days,current,hours"),
             URLQueryItem(name: "unitGroup", value: "metric")
         ]
         guard let url = components.url else { throw WeatherError.invalidLocation }
-        var request = URLRequest(url: url)
+        // Each user-requested refresh should fetch data rather than reuse the local HTTP cache.
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.timeoutInterval = 30
         // Keyless requests require gzip. URLSession decompresses the response automatically.
         request.setValue("gzip", forHTTPHeaderField: "Accept-Encoding")

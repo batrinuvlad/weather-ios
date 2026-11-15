@@ -22,6 +22,8 @@ struct WeatherView: View {
                 .frame(maxWidth: 600, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
+            .refreshable { await model.load() }
+            .scrollBounceBehavior(.always, axes: .vertical)
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Weather")
             .task {
@@ -55,17 +57,40 @@ struct WeatherView: View {
         case .loaded(let forecast):
             Text(forecast.resolvedAddress)
                 .font(.title2.bold())
+            if let lastUpdated = model.lastUpdated {
+                Text("Last updated: \(WeatherPresentation.time(lastUpdated, timeZone: forecast.timeZone))")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            if let error = model.refreshError {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Couldn’t refresh. Showing previously loaded weather.")
+                        .font(.subheadline.bold())
+                    Text(error.localizedDescription)
+                        .font(.subheadline)
+                    Button("Retry") { Task { await model.load() } }
+                        .disabled(model.isLoading)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.background, in: RoundedRectangle(cornerRadius: 16))
+            }
             currentConditions(forecast.currentConditions)
+            HourlyForecastSection(
+                hours: forecast.remainingHoursToday(at: model.currentDate),
+                timeZone: forecast.timeZone,
+                temperatureUnit: model.temperatureUnit
+            )
             VStack(alignment: .leading, spacing: 16) {
                 Text("Seven-day forecast")
                     .font(.headline)
                 if let firstDay = forecast.forecastDays.first {
-                    Text(WeatherPresentation.forecastPeriod(starting: firstDay.date, timeZone: forecast.timeZone))
+                    Text(WeatherPresentation.forecastPeriod(starting: firstDay.date, timeZone: forecast.timeZone, now: model.currentDate))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
                 ForEach(forecast.forecastDays) { day in
-                    ForecastDayRow(day: day, timeZone: forecast.timeZone)
+                    ForecastDayRow(day: day, timeZone: forecast.timeZone, temperatureUnit: model.temperatureUnit)
                     if day.id != forecast.forecastDays.last?.id {
                         Divider()
                     }
@@ -77,19 +102,26 @@ struct WeatherView: View {
     }
 
     private func currentConditions(_ current: CurrentConditions) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        @Bindable var model = model
+        return VStack(alignment: .leading, spacing: 12) {
             Text("Now")
                 .font(.headline)
+            Picker("Temperature unit", selection: $model.temperatureUnit) {
+                ForEach(TemperatureUnit.allCases, id: \.self) { unit in
+                    Text(unit.rawValue).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
             HStack(spacing: 16) {
                 Image(systemName: WeatherPresentation.symbol(for: current.icon))
                     .font(.largeTitle)
                     .foregroundStyle(.blue)
                     .accessibilityHidden(true)
-                Text(WeatherPresentation.temperature(current.temperature))
+                Text(WeatherPresentation.temperature(current.temperature, unit: model.temperatureUnit))
                     .font(.largeTitle.bold())
             }
             Text(WeatherPresentation.conditions(current.conditions))
-            Text("Feels like \(WeatherPresentation.temperature(current.feelsLike))")
+            Text("Feels like \(WeatherPresentation.temperature(current.feelsLike, unit: model.temperatureUnit))")
                 .foregroundStyle(.secondary)
             Label("Wind \(WeatherPresentation.windSpeed(current.windSpeed))", systemImage: "wind")
                 .foregroundStyle(.secondary)

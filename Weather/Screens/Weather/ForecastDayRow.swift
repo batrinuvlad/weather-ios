@@ -3,6 +3,7 @@ import SwiftUI
 struct ForecastDayRow: View {
     let day: DailyForecast
     let timeZone: TimeZone
+    let temperatureUnit: TemperatureUnit
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -27,8 +28,8 @@ struct ForecastDayRow: View {
 
     @ViewBuilder
     private var temperatures: some View {
-        Text("High \(WeatherPresentation.temperature(day.high))")
-        Text("Low \(WeatherPresentation.temperature(day.low))")
+        Text("High \(WeatherPresentation.temperature(day.high, unit: temperatureUnit))")
+        Text("Low \(WeatherPresentation.temperature(day.low, unit: temperatureUnit))")
             .foregroundStyle(.secondary)
     }
 }

@@ -6,15 +6,15 @@ final class WeatherDecodingTests: XCTestCase {
 
         XCTAssertEqual(forecast.resolvedAddress, "London, England, United Kingdom")
         XCTAssertEqual(forecast.timezone, "Europe/London")
-        XCTAssertEqual(forecast.currentConditions.temperature, 6.8)
-        XCTAssertEqual(forecast.currentConditions.feelsLike, 6.8)
-        XCTAssertEqual(forecast.currentConditions.windSpeed, 3.4)
+        XCTAssertEqual(forecast.currentConditions.temperature, 10.3)
+        XCTAssertEqual(forecast.currentConditions.feelsLike, 10.3)
+        XCTAssertEqual(forecast.currentConditions.windSpeed, 3.2)
         XCTAssertEqual(forecast.currentConditions.conditions, "Partially cloudy")
         XCTAssertEqual(forecast.days.count, 8)
         XCTAssertEqual(forecast.forecastDays.count, 7)
-        XCTAssertEqual(forecast.forecastDays.first?.timestamp, 1794614400)
-        XCTAssertEqual(forecast.forecastDays.first?.high, 7.1)
-        XCTAssertEqual(forecast.forecastDays.first?.low, -0.7)
+        XCTAssertEqual(forecast.forecastDays.first?.timestamp, 1794700800)
+        XCTAssertEqual(forecast.forecastDays.first?.high, 12.0)
+        XCTAssertEqual(forecast.forecastDays.first?.low, 1.5)
         XCTAssertEqual(forecast.forecastDays.last, forecast.days[6])
     }
 
