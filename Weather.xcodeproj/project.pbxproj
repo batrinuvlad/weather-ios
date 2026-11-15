@@ -6,23 +6,28 @@
 	objectVersion = 71;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		00000000000000000000000B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 000000000000000000000001 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 000000000000000000000008;
-			remoteInfo = Weather;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		000000000000000000000006 /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000000000000000000007 /* WeatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		00000000000000000000001B /* Tested source membership in WeatherTests */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/WeatherForecast.swift,
+				Networking/VisualCrossingWeatherService.swift,
+				Networking/WeatherError.swift,
+				Networking/WeatherService.swift,
+				Screens/Weather/WeatherPresentation.swift,
+				Screens/Weather/WeatherViewModel.swift,
+			);
+			target = 000000000000000000000009 /* WeatherTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		000000000000000000000003 /* Weather */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Weather; sourceTree = "<group>"; };
+		000000000000000000000003 /* Weather */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (00000000000000000000001B /* Tested source membership in WeatherTests */); explicitFileTypes = {}; explicitFolders = (); path = Weather; sourceTree = "<group>"; };
 		000000000000000000000004 /* WeatherTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WeatherTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -96,7 +101,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				00000000000000000000000A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				000000000000000000000004 /* WeatherTests */,
@@ -114,11 +118,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2720;
-				TargetAttributes = {
-					000000000000000000000009 = {
-						TestTargetID = 000000000000000000000008;
-					};
-				};
 			};
 			buildConfigurationList = 000000000000000000000012 /* Build configuration list for PBXProject "Weather" */;
 			compatibilityVersion = "Xcode 16.0";
@@ -172,14 +171,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		00000000000000000000000A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 000000000000000000000008 /* Weather */;
-			targetProxy = 00000000000000000000000B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		000000000000000000000015 /* Debug */ = {
@@ -271,7 +262,6 @@
 		000000000000000000000019 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -286,14 +276,12 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Weather.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Weather";
 			};
 			name = Debug;
 		};
 		00000000000000000000001A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -308,7 +296,6 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Weather.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Weather";
 			};
 			name = Release;
 		};

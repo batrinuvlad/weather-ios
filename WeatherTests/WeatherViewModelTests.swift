@@ -1,5 +1,4 @@
 import XCTest
-@testable import Weather
 
 @MainActor
 final class WeatherViewModelTests: XCTestCase {

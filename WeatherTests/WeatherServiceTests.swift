@@ -1,5 +1,4 @@
 import XCTest
-@testable import Weather
 
 final class WeatherServiceTests: XCTestCase {
     private var session: URLSession!

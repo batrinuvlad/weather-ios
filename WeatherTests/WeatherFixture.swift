@@ -1,5 +1,4 @@
 import Foundation
-@testable import Weather
 
 // This is the unmodified successful response fetched on 14 November 2026.
 enum WeatherFixture {

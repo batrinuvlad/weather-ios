@@ -1,5 +1,4 @@
 import XCTest
-@testable import Weather
 
 final class WeatherDecodingTests: XCTestCase {
     func testGenuineResponseDecodesRequiredFieldsAndSelectsTodayPlusSixDays() throws {
