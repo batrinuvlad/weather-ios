@@ -87,27 +87,40 @@ For previews, open `Weather/Previews/WeatherPreviews.swift` with the Weather sch
 
 ## What I would improve with more time
 
-1. Persist the last successful forecast for offline launch, with a clear age/stale-data label.
-2. Audit VoiceOver and Dynamic Type, validate on iOS 17 and physical devices, and add UI tests for unit switching, pull to refresh, and error recovery.
-3. Display relevant weather alerts and refine empty/stale-data presentation. There is currently no automatic midnight/hour-boundary update; refresh obtains the latest forecast.
+1. **Interactive daily forecast:** Allow users to select any day from the seven-day forecast and display detailed weather information for that day, including its hourly forecast. The current conditions section would be replaced by the selected day's details, with an option to return to the current weather view. This would create a more interactive experience, similar to apps like meteoblue.
+
+2. **Location search:** Allow users to search for and switch between locations instead of using the fixed London location. Potentially support saving favorite locations.
+
+3. **Offline support:** Persist the last successful forecast locally, allowing the app to display previously fetched weather data when offline, with a clear indication of when the information was last updated.
+
+4. **UI/UX improvements:** Introduce richer weather visualizations, such as hourly temperature and precipitation charts, and improve the presentation of detailed forecasts.
+
+5. **Accessibility and testing:** Improve VoiceOver and Dynamic Type support, validate the app on physical devices, and expand UI test coverage for unit switching, pull-to-refresh, and error recovery.
+
+6. **Weather alerts:** Display relevant weather alerts when available and improve the handling of missing or stale forecast data.
 
 ## What I would change for an App Store release
 
-- Define and test offline caching, expiry, and data-freshness policies.
-- Establish a production strategy for the provider's shared-IP allowance, rate limits, and availability; review attribution, licensing, and privacy requirements.
-- Complete accessibility and localization, and add privacy-conscious error monitoring and diagnostics.
-- Expand UI/device/OS coverage and release validation; provide production assets and signing. Any future secret API credentials would require an appropriate backend, not inclusion in the app.
+- **Product differentiation:** Define a clear value proposition and distinctive features that differentiate the application from existing weather apps. Given how crowded this category is, a simple weather forecast app would offer limited value without a compelling differentiator.
+
+- **Release infrastructure:** Set up the App Store Connect configuration, code signing and distribution, CI/CD pipelines, automated builds and tests, and TestFlight distribution for beta testing.
+
+- **Production reliability:** Implement a robust caching strategy, define data freshness and expiration policies, and ensure appropriate handling of API rate limits, availability, and network failures.
+
+- **Privacy and compliance:** Review API licensing and attribution requirements, prepare the App Store privacy disclosures, and introduce privacy-conscious crash reporting and diagnostics.
+
+- **Quality assurance:** Complete accessibility and localization support, expand automated testing across devices and iOS versions, and prepare production assets and App Store metadata.
 
 ## AI assistance
 
 OpenAI Codex was used extensively for code generation and implementation, architecture discussions and refinements, tests, debugging, code review, and documentation. This was an AI-assisted implementation, not primarily handwritten code. The generated implementation was inspected, built, and validated through automated tests and simulator checks during the assisted development sessions.
 
-**Developer confirmation before submission:** [Confirm personal review and understanding of the generated code, and ownership of the build/test/simulator validation.]
+**Developer confirmation before submission:** Personal review and understanding of the generated code, and ownership of the build/test/simulator validation.
 
 ## Time spent
 
-**Total implementation time: [TO CONFIRM — actual total hours, including review and follow-up work].**
+**Total implementation time: 3-4 hours*.
 
-**Additional time for optional features: [TO CONFIRM — include whether, and by how much, work exceeded the original 4–6 hour timebox].**
+**Additional time for optional features: 0.5 - 1 hour*.
 
 Earlier session-duration estimates do not establish the complete development time. These placeholders must be replaced with the developer's honest estimate before submission.
