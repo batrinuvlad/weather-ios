@@ -5,3 +5,5 @@ DerivedData/
 .build/
 .swiftpm/
 ios-take-home-brief.pdf
+xcuserdata/
+*.xcuserstate
