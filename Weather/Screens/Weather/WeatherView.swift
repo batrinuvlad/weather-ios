@@ -2,8 +2,10 @@ import SwiftUI
 
 struct WeatherView: View {
     @State private var model: WeatherViewModel
+    private let automaticallyLoads: Bool
 
-    init(model: WeatherViewModel) {
+    init(model: WeatherViewModel, automaticallyLoads: Bool = true) {
+        self.automaticallyLoads = automaticallyLoads
         _model = State(initialValue: model)
     }
 
@@ -22,14 +24,21 @@ struct WeatherView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Weather")
-            .task { await model.loadIfNeeded() }
+            .task {
+                if automaticallyLoads {
+                    await model.loadIfNeeded()
+                }
+            }
         }
     }
 
     @ViewBuilder
     private var content: some View {
         switch model.state {
-        case .idle, .loading:
+        case .idle:
+            ContentUnavailableView("Weather not loaded", systemImage: "cloud",
+                                   description: Text("No weather request has started."))
+        case .loading:
             ProgressView("Loading weather…")
                 .frame(maxWidth: .infinity, minHeight: 220)
         case .failed(let error):
@@ -50,9 +59,11 @@ struct WeatherView: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Seven-day forecast")
                     .font(.headline)
-                Text("Today and the next six days")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                if let firstDay = forecast.forecastDays.first {
+                    Text(WeatherPresentation.forecastPeriod(starting: firstDay.date, timeZone: forecast.timeZone))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
                 ForEach(forecast.forecastDays) { day in
                     ForecastDayRow(day: day, timeZone: forecast.timeZone)
                     if day.id != forecast.forecastDays.last?.id {

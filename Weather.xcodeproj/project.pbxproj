@@ -12,23 +12,31 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		00000000000000000000001B /* Tested source membership in WeatherTests */ = {
+		00000000000000000000001B /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Models/WeatherForecast.swift,
 				Networking/VisualCrossingWeatherService.swift,
 				Networking/WeatherError.swift,
 				Networking/WeatherService.swift,
+				Previews/MockWeatherService.swift,
 				Screens/Weather/WeatherPresentation.swift,
 				Screens/Weather/WeatherViewModel.swift,
 			);
 			target = 000000000000000000000009 /* WeatherTests */;
 		};
+		00000000000000000000001C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Fixtures/weather.json,
+			);
+			target = 000000000000000000000008 /* Weather */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		000000000000000000000003 /* Weather */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (00000000000000000000001B /* Tested source membership in WeatherTests */); explicitFileTypes = {}; explicitFolders = (); path = Weather; sourceTree = "<group>"; };
-		000000000000000000000004 /* WeatherTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WeatherTests; sourceTree = "<group>"; };
+		000000000000000000000003 /* Weather */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (00000000000000000000001B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Weather; sourceTree = "<group>"; };
+		000000000000000000000004 /* WeatherTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (00000000000000000000001C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = WeatherTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */

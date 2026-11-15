@@ -27,6 +27,20 @@ enum WeatherPresentation {
         return formatter.string(from: date)
     }
 
+    static func forecastPeriod(starting date: Date, timeZone: TimeZone,
+                               now: Date = .now, locale: Locale = .current) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        if calendar.isDate(date, inSameDayAs: now) {
+            return "Today and the next six days"
+        }
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.timeZone = timeZone
+        formatter.dateStyle = .medium
+        return "Seven days from \(formatter.string(from: date))"
+    }
+
     static func symbol(for icon: String?) -> String {
         switch icon {
         case "clear-day": "sun.max.fill"
